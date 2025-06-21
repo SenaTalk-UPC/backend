@@ -2,5 +2,5 @@ from app.main.recognition.interfaces.rest.resource.recognitionResource import Re
 
 class RecognitionCommandFromResourceAssembler:
     @staticmethod
-    def to_sequence(resource: RecognitionResource) -> list[list[float]]:
+    def to_sequence(resource: RecognitionResource):
         return resource.sequence
