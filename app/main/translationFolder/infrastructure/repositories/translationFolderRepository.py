@@ -39,8 +39,10 @@ class TranslationFolderRepository:
         self.db.refresh(folder)
         return folder.to_entity()
 
-    def delete(self, folder_id: int):
+    def delete(self, folder_id: int) -> bool:
         folder = self.db.query(TranslationFolderModel).filter_by(id=folder_id).first()
         if folder:
             self.db.delete(folder)
             self.db.commit()
+            return True
+        return False

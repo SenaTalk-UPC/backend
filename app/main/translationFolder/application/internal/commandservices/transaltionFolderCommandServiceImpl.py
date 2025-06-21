@@ -20,5 +20,5 @@ class TranslationFolderCommandServiceImpl(TranslationFolderCommandService):
     def update_folder(self, folder_id: int, command: UpdateTranslationFolderCommand) -> TranslationFolder:
         return self.repo.update(folder_id, command.name, command.translation_ids)
 
-    def delete_folder(self, folder_id: int) -> None:
-        self.repo.delete(folder_id)
+    def delete_folder(self, folder_id: int) -> bool:
+        return self.repo.delete(folder_id)

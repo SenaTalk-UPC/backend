@@ -71,7 +71,7 @@ def update_folder(
         "data": result,
     }
 
-@router.delete("/{folder_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{folder_id}", status_code=status.HTTP_200_OK)
 def delete_folder(folder_id: int, db: Session = Depends(get_db)):
     repo = TranslationFolderRepository(db)
     service = TranslationFolderCommandServiceImpl(repo)
