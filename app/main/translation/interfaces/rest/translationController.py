@@ -17,12 +17,13 @@ from app.main.translation.interfaces.rest.resources.updateTranslationResource im
 from app.main.translation.interfaces.rest.transform.createTranslationCommandFromResourceAssembler import CreateTranslationCommandFromResourceAssembler
 from app.main.translation.interfaces.rest.transform.translationResourceFromEntityAssembler import TranslationResourceFromEntityAssembler
 from app.main.translation.interfaces.rest.transform.updateTranslationCommandFromResourceAssembler import UpdateTranslationCommandFromResourceAssembler
+from app.main.iam.infrastructure.security.security import get_current_user
 
 router = APIRouter(tags=["Translations"])
 
 
 @router.post("", response_model=dict, status_code=201)
-def create_translation(resource: CreateTranslationResource, db: Session = Depends(get_db)):
+def create_translation(resource: CreateTranslationResource, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = TranslationRepository(db)
     service = TranslationCommandServiceImpl(repo)
     command = CreateTranslationCommandFromResourceAssembler.to_command(resource)
@@ -36,7 +37,7 @@ def create_translation(resource: CreateTranslationResource, db: Session = Depend
 
 
 @router.get("", response_model=dict)
-def get_all_translations(db: Session = Depends(get_db)):
+def get_all_translations(db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     service = TranslationQueryServiceImpl(db)
     translations = service.get_all()
     resources = [TranslationResourceFromEntityAssembler.from_entity(t) for t in translations]
@@ -48,7 +49,7 @@ def get_all_translations(db: Session = Depends(get_db)):
 
 
 @router.get("/{translation_id}", response_model=dict)
-def get_translation_by_id(translation_id: int, db: Session = Depends(get_db)):
+def get_translation_by_id(translation_id: int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     service = TranslationQueryServiceImpl(db)
     translation = service.get_by_translation_id(translation_id)
     resource = TranslationResourceFromEntityAssembler.from_entity(translation)
@@ -60,7 +61,7 @@ def get_translation_by_id(translation_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{translation_id}", response_model=dict)
-def update_translation(translation_id: int, resource: UpdateTranslationResource, db: Session = Depends(get_db)):
+def update_translation(translation_id: int, resource: UpdateTranslationResource, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = TranslationRepository(db)
     service = TranslationCommandServiceImpl(repo)
     data = UpdateTranslationCommandFromResourceAssembler.to_dict(resource)
@@ -74,7 +75,7 @@ def update_translation(translation_id: int, resource: UpdateTranslationResource,
 
 
 @router.delete("/{translation_id}", response_model=dict)
-def delete_translation(translation_id: int, db: Session = Depends(get_db)):
+def delete_translation(translation_id: int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = TranslationRepository(db)
     service = TranslationCommandServiceImpl(repo)
     service.delete_translation(translation_id)

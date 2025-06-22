@@ -12,11 +12,12 @@ from app.main.translationFolder.interfaces.rest.resource.createTranslationFolder
 from app.main.translationFolder.interfaces.rest.resource.updateTranslationFolderResource import UpdateTranslationFolderResource
 from app.main.translationFolder.interfaces.rest.transform.createTranslationFolderCommandFromResourceAssembler import CreateTranslationFolderCommandFromResourceAssembler
 from app.main.translationFolder.interfaces.rest.transform.translationFolderResourceFromEntityAssembler import TranslationFolderResourceFromEntityAssembler
+from app.main.iam.infrastructure.security.security import get_current_user
 
 router = APIRouter(tags=["Translation Folder"])
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-def create_folder(resource: CreateTranslationFolderResource, db: Session = Depends(get_db)):
+def create_folder(resource: CreateTranslationFolderResource, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = TranslationFolderRepository(db)
     service = TranslationFolderCommandServiceImpl(repo)
     command = CreateTranslationFolderCommandFromResourceAssembler.to_command(resource)
@@ -29,7 +30,7 @@ def create_folder(resource: CreateTranslationFolderResource, db: Session = Depen
     }
 
 @router.get("", status_code=status.HTTP_200_OK)
-def get_all_folders(db: Session = Depends(get_db)):
+def get_all_folders(db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = TranslationFolderRepository(db)
     service = TranslationFolderQueryServiceImpl(repo)
     entities = service.get_all_folders()
@@ -41,7 +42,7 @@ def get_all_folders(db: Session = Depends(get_db)):
     }
 
 @router.get("/{folder_id}", status_code=status.HTTP_200_OK)
-def get_folder_by_id(folder_id: int, db: Session = Depends(get_db)):
+def get_folder_by_id(folder_id: int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = TranslationFolderRepository(db)
     service = TranslationFolderQueryServiceImpl(repo)
     entity = service.get_folder_by_id(folder_id)
@@ -55,10 +56,7 @@ def get_folder_by_id(folder_id: int, db: Session = Depends(get_db)):
     }
 
 @router.put("/{folder_id}", status_code=status.HTTP_200_OK)
-def update_folder(
-    folder_id: int,
-    resource: UpdateTranslationFolderResource,
-    db: Session = Depends(get_db)
+def update_folder(folder_id: int, resource: UpdateTranslationFolderResource, db: Session = Depends(get_db), user: dict = Depends(get_current_user)
 ):
     repo = TranslationFolderRepository(db)  # ✅ Esto estaba faltando
     service = TranslationFolderCommandServiceImpl(repo)
@@ -72,7 +70,7 @@ def update_folder(
     }
 
 @router.delete("/{folder_id}", status_code=status.HTTP_200_OK)
-def delete_folder(folder_id: int, db: Session = Depends(get_db)):
+def delete_folder(folder_id: int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = TranslationFolderRepository(db)
     service = TranslationFolderCommandServiceImpl(repo)
     success = service.delete_folder(folder_id)
