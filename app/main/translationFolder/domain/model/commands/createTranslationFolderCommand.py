@@ -1,5 +1,5 @@
 class CreateTranslationFolderCommand:
-    def __init__(self, name: str, description: str, translation_ids: list[int]):
+    def __init__(self, name: str, description: str, userId: int):
         self.name = name
-        self.description = description
-        self.translation_ids = translation_ids
+        self.description = description,
+        self.userId = userId

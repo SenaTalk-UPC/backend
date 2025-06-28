@@ -1,5 +1,9 @@
 from pydantic import BaseModel
 from typing import List
 
-class RecognitionResource(BaseModel):
-    sequence: List[List[float]]  # Shape: (30, 1662)
+class RecognitionRequestResource(BaseModel):
+    keypoints: List[float]
+
+class RecognitionResponseResource(BaseModel):
+    text: str
+    confidence: float

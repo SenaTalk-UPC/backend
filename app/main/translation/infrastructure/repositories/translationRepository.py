@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from app.main.translation.application.internal.dtos.translationDto import TranslationDTO
 from app.main.translation.infrastructure.models.translationModel import TranslationModel
 from typing import List, Optional
 from datetime import datetime
@@ -7,8 +8,8 @@ class TranslationRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def save(self, user_email: str, text: str):
-        translation = TranslationModel(user_email=user_email, text=text)
+    def save(self, text: str, folder_id: str):
+        translation = TranslationModel(text=text, folder_id=folder_id)
         self.db.add(translation)
         self.db.commit()
         self.db.refresh(translation)
@@ -34,3 +35,7 @@ class TranslationRepository:
         self.db.commit()
         self.db.refresh(translation)
         return translation
+    
+    def get_by_folder_id(self, folder_id: int) -> List[TranslationDTO]:
+        records = self.db.query(TranslationModel).filter_by(folder_id=folder_id).all()
+        return records

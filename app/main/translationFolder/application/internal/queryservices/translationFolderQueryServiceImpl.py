@@ -12,3 +12,6 @@ class TranslationFolderQueryServiceImpl(FolderQueryService):
 
     def get_folder_by_id(self, folder_id: int) -> Optional[TranslationFolder]:
         return self.repository.get_by_id(folder_id)
+    
+    def get_folders_by_user_id(self, user_id: int) -> List[TranslationFolder]:
+        return self.repository.get_by_user_id(user_id)

@@ -9,5 +9,5 @@ class TranslationFolderResourceFromEntityAssembler:
             id=entity.id,
             name=entity.name,
             description=entity.description,
-            translation_ids=entity.translation_ids
+            userId=entity.userId
         )

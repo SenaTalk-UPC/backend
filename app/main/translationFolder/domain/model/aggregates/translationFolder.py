@@ -1,11 +1,11 @@
 from typing import List
 
 class TranslationFolder:
-    def __init__(self, id: int, name: str, description: str, translation_ids: List[int]):
+    def __init__(self, id: int, name: str, description: str, userId: int):
         self.id = id
         self.name = name
         self.description = description
-        self.translation_ids = translation_ids
+        self.userId = userId
 
     def add_translation(self, translation_id: int):
         if translation_id not in self.translation_ids:

@@ -1,6 +1,7 @@
-# app/main/recognition/domain/services/queryService.py
-
 from abc import ABC, abstractmethod
+from app.main.recognition.domain.model.aggregates.recognition import Recognition
 
 class RecognitionQueryService(ABC):
-    pass  # No se define aún ningún método de consulta
+    @abstractmethod
+    def predict(self, keypoints: list[float]) -> Recognition:
+        pass

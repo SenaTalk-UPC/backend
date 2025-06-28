@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends
+from typing import List
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.main.config.database import get_db
 
 # Services
 from app.main.translation.application.internal.commandservices.translationCommandServiceImpl import TranslationCommandServiceImpl
+from app.main.translation.application.internal.dtos.translationDto import TranslationDTO
 from app.main.translation.application.internal.queryservices.translationQueryServiceImpl import TranslationQueryServiceImpl
 
 # Resources
@@ -83,3 +85,12 @@ def delete_translation(translation_id: int, db: Session = Depends(get_db), user:
         "message": "Translation deleted successfully",
         "status": "success"
     }
+
+@router.get("/folder/{folder_id}", response_model=List[TranslationDTO])
+def get_translations_by_folder(folder_id: int, db: Session = Depends(get_db), user: dict = Depends(get_current_user)):
+    try:
+        service = TranslationQueryServiceImpl(db)
+        translations = service.get_by_folder_id(folder_id)
+        return [TranslationResourceFromEntityAssembler.from_entity(t) for t in translations]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

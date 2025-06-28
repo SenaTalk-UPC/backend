@@ -80,3 +80,15 @@ def delete_folder(folder_id: int, db: Session = Depends(get_db), user: dict = De
         "message": "Folder deleted successfully",
         "status": "success"
     }
+
+@router.get("/user/{user_id}")
+def get_folders_by_user(user_id: int, db: Session = Depends(get_db)):
+    repo = TranslationFolderRepository(db)
+    service = TranslationFolderQueryServiceImpl(repo)
+    folders = service.get_folders_by_user_id(user_id)
+    resources = [TranslationFolderResourceFromEntityAssembler.from_entity(f) for f in folders]
+    return {
+        "message": "Folders retrieved successfully",
+        "status": "success",
+        "data": resources
+    }

@@ -5,6 +5,6 @@ class CreateTranslationCommandFromResourceAssembler:
     @staticmethod
     def to_command(resource: CreateTranslationResource) -> CreateTranslationCommand:
         return CreateTranslationCommand(
-            user_email=resource.user_email,
-            text=resource.text
+            text=resource.text,
+            folder_id=resource.folder_id
         )

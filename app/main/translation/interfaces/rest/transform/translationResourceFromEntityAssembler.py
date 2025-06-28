@@ -6,6 +6,6 @@ class TranslationResourceFromEntityAssembler:
     def from_entity(entity: TranslationModel) -> TranslationResource:
         return TranslationResource(
             id=entity.id,
-            user_email=entity.user_email,
-            text=entity.text
+            text=entity.text,
+            folder_id=entity.folder_id
         )

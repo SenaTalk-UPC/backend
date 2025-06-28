@@ -30,8 +30,8 @@ def login(sign_in_resource: SignInResource, db: Session = Depends(get_db)):
 @router.post("/register")
 def register(sign_up_resource: SignUpResource, db: Session = Depends(get_db)):
     service = AuthCommandServiceImpl(db)
-    email, password = SignUpCommandFromResourceAssembler.to_values(sign_up_resource)
-    success = service.register(email, password)
+    username, email, password = SignUpCommandFromResourceAssembler.to_values(sign_up_resource)
+    success = service.register(username, email, password)
     if not success:
         raise HTTPException(status_code=400, detail="El correo ya está registrado")
     return {

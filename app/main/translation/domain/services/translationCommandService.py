@@ -3,7 +3,7 @@ from app.main.translation.infrastructure.models.translationModel import Translat
 
 class TranslationCommandService(ABC):
     @abstractmethod
-    def create_translation(self, user_email: str, text: str) -> TranslationModel:
+    def create_translation(self, user_email: str, text: str, folder_id: int) -> TranslationModel:
         pass
 
     @abstractmethod

@@ -1,3 +1,4 @@
+from typing import List
 from app.main.translationFolder.domain.services.translationFolderCommandService import TranslationFolderCommandService
 from app.main.translationFolder.domain.model.aggregates.translationFolder import TranslationFolder
 from app.main.translationFolder.infrastructure.repositories.translationFolderRepository import TranslationFolderRepository
@@ -13,12 +14,13 @@ class TranslationFolderCommandServiceImpl(TranslationFolderCommandService):
             id=None,
             name=command.name,
             description=command.description,
-            translation_ids=command.translation_ids
+            userId=command.userId
         )
         return self.repo.save(folder)
 
     def update_folder(self, folder_id: int, command: UpdateTranslationFolderCommand) -> TranslationFolder:
-        return self.repo.update(folder_id, command.name, command.translation_ids)
+        return self.repo.update(folder_id, command.name)
 
     def delete_folder(self, folder_id: int) -> bool:
         return self.repo.delete(folder_id)
+

@@ -19,5 +19,5 @@ class AuthService:
         if self.repo.get_by_email(user.email):
             return False
         hashed_pw = bcrypt.hashpw(user.password.encode(), bcrypt.gensalt()).decode()
-        self.repo.create_user(email=user.email, hashed_password=hashed_pw)
+        self.repo.create_user(username=user.username, email=user.email, hashed_password=hashed_pw)
         return True

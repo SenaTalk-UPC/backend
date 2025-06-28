@@ -12,7 +12,7 @@ class TranslationFolderRepository:
         db_folder = TranslationFolderModel(
             name=folder.name,
             description=folder.description,
-            translation_ids=json.dumps(folder.translation_ids)
+            userId=folder.userId,
         )
         self.db.add(db_folder)
         self.db.commit()
@@ -33,7 +33,6 @@ class TranslationFolderRepository:
             raise Exception("Folder not found")
 
         folder.name = name
-        folder.translation_ids = json.dumps(translation_ids)
 
         self.db.commit()
         self.db.refresh(folder)
@@ -46,3 +45,6 @@ class TranslationFolderRepository:
             self.db.commit()
             return True
         return False
+    
+    def get_by_user_id(self, userId: int) -> List[TranslationFolder]:
+        return self.db.query(TranslationFolderModel).filter(TranslationFolderModel.userId == userId).all()

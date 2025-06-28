@@ -10,7 +10,7 @@ class CreateTranslationFolderCommandFromResourceAssembler:
         return CreateTranslationFolderCommand(
             name=resource.name,
             description=resource.description,
-            translation_ids=resource.translation_ids
+            userId=resource.userId
         )
     
     @staticmethod
@@ -19,5 +19,5 @@ class CreateTranslationFolderCommandFromResourceAssembler:
             folder_id=folder_id,
             name=resource.name,
             description=resource.description,
-            translation_ids=resource.translation_ids
+            userId=resource.userId
         )

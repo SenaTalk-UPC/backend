@@ -2,5 +2,5 @@ from app.main.recognition.interfaces.rest.resource.recognitionResource import Re
 
 class RecognitionCommandFromResourceAssembler:
     @staticmethod
-    def to_sequence(resource: RecognitionResource):
-        return resource.sequence
+    def to_base64(resource: RecognitionResource) -> str:
+        return resource.image_base64
