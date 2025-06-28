@@ -1,26 +1,15 @@
-from app.main.recognition.domain.services.recognitionQueryService import RecognitionQueryService
+# app/main/recognition/application/internal/queryservices/recognitionQueryServiceImpl.py
 from app.main.recognition.domain.model.aggregates.recognition import Recognition
-from app.main.recognition.infrastructure.model.recognitionModelLoader import model, actions
-import numpy as np
+from app.main.recognition.infrastructure.model.recognitionModelLoader import RecognitionModelLoader
 
-class RecognitionQueryServiceImpl(RecognitionQueryService):
+class RecognitionQueryServiceImpl:
     def __init__(self):
-        self.sequence = []
-        self.threshold = 0.5
-        self.last_prediction = ""
+        loader = RecognitionModelLoader()
+        self.model = loader.get_model()
+        self.actions = loader.get_actions()
+        self.recognition = Recognition(self.actions)
 
-    def predict(self, keypoints: list[float]) -> Recognition:
-        self.sequence.append(keypoints)
-        if len(self.sequence) > 30:
-            self.sequence.pop(0)
-
-        if len(self.sequence) == 30:
-            res = model.predict(np.expand_dims(self.sequence, axis=0))[0]
-            confidence = float(max(res))
-            action = actions[np.argmax(res)]
-
-            if confidence > self.threshold:
-                self.last_prediction = action
-                return Recognition(text=action, confidence=confidence)
-
-        return Recognition(text=self.last_prediction, confidence=0.0)
+    def predict(self, keypoints_sequence: list) -> dict:
+        for keypoints in keypoints_sequence:
+            self.recognition.append_keypoints(keypoints)
+        return self.recognition.predict(self.model)

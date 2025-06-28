@@ -48,3 +48,13 @@ class TranslationFolderRepository:
     
     def get_by_user_id(self, userId: int) -> List[TranslationFolder]:
         return self.db.query(TranslationFolderModel).filter(TranslationFolderModel.userId == userId).all()
+    
+    def get_favorite_by_user_id(self, user_id: int):
+        return (
+            self.db.query(TranslationFolderModel)
+            .filter(
+                TranslationFolderModel.userId == user_id,
+                TranslationFolderModel.name == "Favoritos"
+            )
+            .first()
+        )

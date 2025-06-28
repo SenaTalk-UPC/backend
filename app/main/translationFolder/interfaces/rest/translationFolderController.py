@@ -92,3 +92,17 @@ def get_folders_by_user(user_id: int, db: Session = Depends(get_db)):
         "status": "success",
         "data": resources
     }
+
+@router.get("/user/{user_id}/favorite")
+def get_favorite_folder_by_user(user_id: int, db: Session = Depends(get_db)):
+    repo = TranslationFolderRepository(db)
+    service = TranslationFolderQueryServiceImpl(repo)
+    folder = service.get_favorite_folder_by_user_id(user_id)
+    if folder is None:
+        raise HTTPException(status_code=404, detail="Favorite folder not found")
+    result = TranslationFolderResourceFromEntityAssembler.from_entity(folder)
+    return {
+        "message": "Favorite folder retrieved successfully",
+        "status": "success",
+        "data": result
+    }

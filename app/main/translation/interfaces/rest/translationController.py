@@ -94,3 +94,4 @@ def get_translations_by_folder(folder_id: int, db: Session = Depends(get_db), us
         return [TranslationResourceFromEntityAssembler.from_entity(t) for t in translations]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
