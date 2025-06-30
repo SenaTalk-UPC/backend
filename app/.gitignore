@@ -15,3 +15,8 @@ venv/
 
 # Archivos de pruebas o logs
 *.log
+
+# Ignorar claves de Google
+/secrets/
+/*.json
+
