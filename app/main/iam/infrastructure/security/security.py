@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from typing import Optional
 import bcrypt
@@ -5,11 +6,17 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from dotenv import load_dotenv
 
-# Configuración del token
-SECRET_KEY = "supersecreto123"  # ⚠️ Cámbialo por una variable de entorno en producción
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+# Cargar variables del archivo .env si estás en local
+load_dotenv()
+
+# Configuración del token desde variables de entorno
+SECRET_KEY = os.getenv("JWT_SECRET")
+ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")  # Valor por defecto
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", 30))
+
+# OAuth2 con FastAPI
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # Contexto para el hash de contraseñas
@@ -23,12 +30,15 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+# Función para hashear contraseña
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
+# Función para verificar contraseña
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(plain_password.encode(), hashed_password.encode())
 
+# Función para obtener el usuario actual desde el token JWT
 def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

@@ -4,6 +4,8 @@ from app.main.iam.interfaces.rest.authController import router as auth_router
 from app.main.translationFolder.interfaces.rest.translationFolderController import router as translation_folder_router
 from app.main.recognition.interfaces.rest.recognitionController import router as recognition_router
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI(title="Translation API (DDD Example)")
 
